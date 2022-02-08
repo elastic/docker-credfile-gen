@@ -9,13 +9,8 @@ TESTUNITARGS ?= -timeout 10s -race -cover
 TEST_REPORT ?= test-report.xml
 BUILD_OUTPUT ?= bin/$(BINARY)
 
-ifneq ($(wildcard scripts/Makefile.help),)
-	include scripts/Makefile.help
-endif
-
-ifneq ($(wildcard scripts/Makefile.deps),)
-	include scripts/Makefile.deps
-endif
+include scripts/Makefile.help
+include scripts/Makefile.deps
 
 ### Build Targets
 
@@ -42,7 +37,7 @@ clean:
 ### Dev Targets
 
 ## Runs all the project linters
-lint:
+lint: deps
 	@ echo "-> Running golint..."
 	@ $(GOBIN)/golangci-lint run
 	@ echo "-> Checking source file license headers..."
