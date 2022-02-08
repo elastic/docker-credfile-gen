@@ -1,0 +1,33 @@
+OS:=$(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH:=$(shell scripts/uname_arch.sh)
+VERSION_DIR:=$(GOBIN)/versions
+
+VERSION_GOLICENSER:=v0.4.0
+VERSION_GOLANGCILINT:=v1.44.0
+
+### Dependency target
+
+## Installs go-licenser and golangci-lint with any other dependencies added as $(PROJECT_DEPS)
+deps: $(GOBIN)/go-licenser $(GOBIN)/golangci-lint $(PROJECT_DEPS)
+
+$(GOBIN):
+	@ mkdir -p $(GOBIN)
+
+$(VERSION_DIR): | $(GOBIN)
+	@ mkdir -p $(GOBIN)/versions
+
+$(VERSION_DIR)/.version-go-licenser-$(VERSION_GOLICENSER): | $(VERSION_DIR)
+	@ rm -f $(VERSION_DIR)/.version-go-licenser-*
+	@ echo $(VERSION_GOLICENSER) > $(VERSION_DIR)/.version-go-licenser-$(VERSION_GOLICENSER)
+
+$(GOBIN)/go-licenser: $(VERSION_DIR)/.version-go-licenser-$(VERSION_GOLICENSER) | $(GOBIN)
+	@ echo "-> Installing go-licenser..."
+	@ go install github.com/elastic/go-licenser@$(VERSION_GOLICENSER)
+
+$(VERSION_DIR)/.version-golangci-lint-$(VERSION_GOLANGCILINT): | $(VERSION_DIR)
+	@ rm -f $(VERSION_DIR)/.version-golangci-lint-*
+	@ echo $(VERSION_GOLANGCILINT) > $(VERSION_DIR)/.version-golangci-lint-$(VERSION_GOLANGCILINT)
+
+$(GOBIN)/golangci-lint: $(VERSION_DIR)/.version-golangci-lint-$(VERSION_GOLANGCILINT) | $(GOBIN)
+	@ echo "-> Installing golangci-lint..."
+	@ curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(GOBIN) $(VERSION_GOLANGCILINT)
