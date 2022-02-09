@@ -1,4 +1,5 @@
 BINARY := docker-credfile-gen
+VERSION := 0.2.0
 SHELL := /bin/bash -o pipefail
 ifndef GOBIN
 	export GOBIN ?= $(shell pwd)/bin
@@ -8,6 +9,8 @@ TEST ?= ./...
 TESTUNITARGS ?= -timeout 10s -race -cover
 TEST_REPORT ?= test-report.xml
 BUILD_OUTPUT ?= bin/$(BINARY)
+
+GIT_REMOTE ?= upstream
 
 include scripts/Makefile.help
 include scripts/Makefile.deps
@@ -56,3 +59,18 @@ format: deps
 unit:
 	@ echo "-> Running unit tests for $(BINARY)..."
 	@ go test $(TESTARGS) $(TESTUNITARGS) $(TEST)
+
+### Release targets
+
+## Creates a tag with the current version and pushes it to $(GIT_REMOTE), which defaults to 'upstream'.
+tag:
+	@ git tag v$(VERSION)
+	@ git push $(GIT_REMOTE) v$(VERSION)
+
+## Manually release a new version matching $(VERSION).
+release: $(GOBIN)/goreleaser
+	@ $(GOBIN)/goreleaser release --rm-dist
+
+## Builds a local snapshot in the 'dist/' folder.
+snapshot: $(GOBIN)/goreleaser
+	@ $(GOBIN)/goreleaser build --snapshot --rm-dist

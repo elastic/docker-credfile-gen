@@ -4,11 +4,12 @@ VERSION_DIR:=$(GOBIN)/versions
 
 VERSION_GOLICENSER:=v0.4.0
 VERSION_GOLANGCILINT:=v1.44.0
+VERSION_GORELEASER:=v1.4.1
 
 ### Dependency target
 
-## Installs go-licenser and golangci-lint with any other dependencies added as $(PROJECT_DEPS)
-deps: $(GOBIN)/go-licenser $(GOBIN)/golangci-lint $(PROJECT_DEPS)
+## Installs go-licenser and golangci-lint.
+deps: $(GOBIN)/go-licenser $(GOBIN)/golangci-lint
 
 $(GOBIN):
 	@ mkdir -p $(GOBIN)
@@ -31,3 +32,11 @@ $(VERSION_DIR)/.version-golangci-lint-$(VERSION_GOLANGCILINT): | $(VERSION_DIR)
 $(GOBIN)/golangci-lint: $(VERSION_DIR)/.version-golangci-lint-$(VERSION_GOLANGCILINT) | $(GOBIN)
 	@ echo "-> Installing golangci-lint..."
 	@ curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(GOBIN) $(VERSION_GOLANGCILINT)
+
+$(VERSION_DIR)/.version-goreleaser-$(VERSION_GORELEASER): | $(VERSION_DIR)
+	@ rm -f $(VERSION_DIR)/.version-goreleaser-*
+	@ echo $(VERSION_GORELEASER) > $(VERSION_DIR)/.version-goreleaser-$(VERSION_GORELEASER)
+
+$(GOBIN)/goreleaser: $(VERSION_DIR)/.version-goreleaser-$(VERSION_GORELEASER) | $(GOBIN)
+	@ echo "-> Installing goreleaser..."
+	@ go install github.com/goreleaser/goreleaser@$(VERSION_GORELEASER)
