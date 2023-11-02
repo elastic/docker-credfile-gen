@@ -1,4 +1,4 @@
-module github.com/elastic/cloud/go/docker-credential-file-gen
+module github.com/elastic/docker-credfile-gen
 
 go 1.17
 
@@ -14,6 +14,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
-	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	gotest.tools/v3 v3.0.3 // indirect
 )

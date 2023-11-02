@@ -25,7 +25,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/elastic/cloud/go/docker-credential-file-gen/internal/dockerconfig"
+	"github.com/elastic/docker-credfile-gen/internal/dockerconfig"
 )
 
 func Test_writeFile(t *testing.T) {
