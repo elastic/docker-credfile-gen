@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/docker/cli v20.10.3+incompatible
-	github.com/stretchr/testify v1.2.2
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
@@ -15,5 +15,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.0.3 // indirect
 )
