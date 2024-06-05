@@ -3,7 +3,7 @@ module github.com/elastic/docker-credfile-gen
 go 1.17
 
 require (
-	github.com/docker/cli v20.10.3+incompatible
+	github.com/docker/cli v26.1.4+incompatible
 	github.com/stretchr/testify v1.2.2
 )
 
