@@ -1,7 +1,7 @@
 # This Dockerfile is used to cross compile docker-credfile-gen
 # to the host machine's OS/ARCH combination inside a Docker container.
 
-FROM golang:1.19 as cache
+FROM golang:1.22 as cache
 WORKDIR /cache
 COPY go.* /cache/
 RUN go mod download
