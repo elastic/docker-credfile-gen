@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -31,8 +32,10 @@ import (
 
 func main() {
 	var credFile string
+	var raw bool
 	flagSet := flag.NewFlagSet("docker-credential-file-gen", flag.ExitOnError)
 	flagSet.StringVar(&credFile, "output", ".docker-config.json", "resulting docker credential file path")
+	flagSet.BoolVar(&raw, "raw", false, "skip logging and write the output directly to file")
 	flagSet.Usage = func() {
 		fmt.Fprintf(flagSet.Output(), "usage: %s [-output output]\n\n", flagSet.Name())
 		fmt.Fprintf(flagSet.Output(), "generates a json formatted with all the the docker registry credentials found in the credential store\n\n")
@@ -41,7 +44,6 @@ func main() {
 	}
 
 	loggerFlags := log.Lshortfile | log.Lmsgprefix
-	logger := log.New(os.Stdout, "INFO ", loggerFlags)
 	errLogger := log.New(os.Stderr, "ERROR ", loggerFlags)
 
 	if err := flagSet.Parse(os.Args[1:]); err != nil {
@@ -49,6 +51,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	out := io.Writer(os.Stdout)
+	if raw {
+		out = io.Discard
+	}
+	logger := log.New(out, "INFO ", loggerFlags)
 	logger.Println("loading docker configuration file from system")
 	cfgFile := config.LoadDefaultConfigFile(os.Stderr)
 
@@ -66,14 +73,17 @@ func main() {
 }
 
 func writeFile(name string, contents dockerconfig.File) error {
-	f, err := os.Create(name)
-	if err != nil {
-		return err
+	var w io.Writer = os.Stdout
+	if name != "-" {
+		f, err := os.Create(name)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		w = f
 	}
-	defer f.Close()
 
-	encoder := json.NewEncoder(f)
+	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "  ")
-
 	return encoder.Encode(contents)
 }
