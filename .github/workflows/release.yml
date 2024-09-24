@@ -34,6 +34,6 @@ jobs:
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release --clean ${{ inputs.dry-run && '--skip=publish' }}
+          args: release --clean ${{ inputs.dry-run && '--snapshot' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
