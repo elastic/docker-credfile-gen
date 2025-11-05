@@ -3,13 +3,12 @@ module github.com/elastic/docker-credfile-gen
 go 1.17
 
 require (
-	github.com/docker/cli v20.10.3+incompatible
+	github.com/docker/cli v28.5.2+incompatible
 	github.com/stretchr/testify v1.9.0
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/docker/docker v20.10.3+incompatible // indirect
 	github.com/docker/docker-credential-helpers v0.6.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
