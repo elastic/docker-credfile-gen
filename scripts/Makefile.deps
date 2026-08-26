@@ -3,7 +3,7 @@ ARCH:=$(shell scripts/uname_arch.sh)
 VERSION_DIR:=$(GOBIN)/versions
 
 VERSION_GOLICENSER:=v0.4.0
-VERSION_GOLANGCILINT:=v1.60.0
+VERSION_GOLANGCILINT:=v1.64.8
 VERSION_GORELEASER:=v1.4.1
 
 ### Dependency target
