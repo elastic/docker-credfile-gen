@@ -37,9 +37,9 @@ func main() {
 	flagSet.StringVar(&credFile, "output", ".docker-config.json", "resulting docker credential file path")
 	flagSet.BoolVar(&raw, "raw", false, "skip logging and write the output directly to file")
 	flagSet.Usage = func() {
-		fmt.Fprintf(flagSet.Output(), "usage: %s [-output output]\n\n", flagSet.Name())
-		fmt.Fprintf(flagSet.Output(), "generates a json formatted with all the the docker registry credentials found in the credential store\n\n")
-		fmt.Fprintf(flagSet.Output(), "available configuration options:\n\n")
+		_, _ = fmt.Fprintf(flagSet.Output(), "usage: %s [-output output]\n\n", flagSet.Name())
+		_, _ = fmt.Fprintf(flagSet.Output(), "generates a json formatted with all the the docker registry credentials found in the credential store\n\n")
+		_, _ = fmt.Fprintf(flagSet.Output(), "available configuration options:\n\n")
 		flagSet.PrintDefaults()
 	}
 
@@ -72,14 +72,19 @@ func main() {
 	}
 }
 
-func writeFile(name string, contents dockerconfig.File) error {
+func writeFile(name string, contents dockerconfig.File) (err error) {
 	var w io.Writer = os.Stdout
 	if name != "-" {
-		f, err := os.Create(name)
+		var f *os.File
+		f, err = os.Create(name)
 		if err != nil {
 			return err
 		}
-		defer f.Close()
+		defer func() {
+			if cerr := f.Close(); err == nil {
+				err = cerr
+			}
+		}()
 		w = f
 	}
 
