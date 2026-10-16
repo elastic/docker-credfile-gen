@@ -51,7 +51,7 @@ lint: deps
 format: deps
 	@ echo "-> Formatting Go files..."
 	@ $(GOBIN)/go-licenser
-	@ $(GOBIN)/golangci-lint run --fix --deadline=5m
+	@ $(GOBIN)/golangci-lint run --fix --timeout=5m
 	@ echo "-> Done."
 
 ## Runs unit tests. Use TESTARGS and TEST to control which flags and packages are used and tested.
