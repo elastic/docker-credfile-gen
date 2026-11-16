@@ -19,7 +19,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -29,16 +28,16 @@ import (
 )
 
 func Test_writeFile(t *testing.T) {
-	dockerConfigFile, err := ioutil.TempFile("", "docker-config-*.json")
+	dockerConfigFile, err := os.CreateTemp("", "docker-config-*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer func() {
-		dockerConfigFile.Close()
-		os.Remove(dockerConfigFile.Name())
+		_ = dockerConfigFile.Close()
+		_ = os.Remove(dockerConfigFile.Name())
 	}()
 
-	invalidPath, err := ioutil.TempDir("", "")
+	invalidPath, err := os.MkdirTemp("", "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -98,7 +97,7 @@ func Test_writeFile(t *testing.T) {
 				return
 			}
 
-			contents, err := ioutil.ReadFile(tt.args.name)
+			contents, err := os.ReadFile(tt.args.name)
 			if err != nil {
 				t.Error(err)
 				return
